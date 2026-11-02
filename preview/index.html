@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MBTI Lab | 问卷预览</title>
+  <script>
+    (function () {
+      var theme = 'light';
+      try {
+        var saved = localStorage.getItem('mbti-theme');
+        if (saved === 'dark' || saved === 'light') theme = saved;
+      } catch (e) {}
+      var query = new URLSearchParams(location.search).get('theme');
+      if (query === 'dark' || query === 'black') theme = 'dark';
+      if (query === 'light' || query === 'white') theme = 'light';
+      document.documentElement.dataset.theme = theme;
+    })();
+  </script>
+  <link rel="stylesheet" href="style.css">
+  <script defer src="logic.js"></script>
+  <script defer src="presets.js"></script>
+  <script defer src="results.js"></script>
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <div class="ambient" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+  </div>
+  <div class="frame">
+    <div class="ribbon" aria-hidden="true">
+      <span class="tone-red"></span>
+      <span class="tone-paper"></span>
+      <span class="tone-yellow"></span>
+      <span class="tone-blue"></span>
+      <span class="tone-red"></span>
+    </div>
+    <header class="topbar">
+      <div class="brand">
+        <span class="mark" aria-hidden="true">M</span>
+        <div class="brand-copy">
+          <strong>MBTI Lab</strong>
+          <span class="top-note">问卷工作台</span>
+        </div>
+      </div>
+      <div class="theme-switch" role="group" aria-label="主色版本">
+        <span class="theme-label">主色</span>
+        <button type="button" id="theme-light" aria-pressed="true">白色</button>
+        <button type="button" id="theme-dark" aria-pressed="false">黑色</button>
+      </div>
+    </header>
+    <main class="layout">
+      <aside class="sidebar">
+        <div class="side-heading">
+          <span class="section-index">01</span>
+          <div>
+            <h1>开始测评</h1>
+            <p>选择题库，或生成自定义问卷</p>
+          </div>
+        </div>
+        <div class="preset-block">
+          <div class="form-heading"><h2 id="preset-heading">内置题库</h2><span>无需 Key</span></div>
+          <p class="hint">点选一套题库即可作答，不需要 API Key。</p>
+          <div id="presets" class="presets" role="group" aria-labelledby="preset-heading"></div>
+        </div>
+        <form id="setup">
+          <div class="form-heading"><h2>自定义问卷</h2><span class="chip-line">需要模型</span></div>
+          <label for="scenario">场景或产品 <span class="optional">选填</span></label>
+          <textarea id="scenario" rows="3" placeholder="例如：旅行规划产品、团队协作"></textarea>
+          <label for="goal">探索目标 <span class="optional">选填</span></label>
+          <textarea id="goal" rows="3" placeholder="例如：发现适合自己的旅行方式"></textarea>
+          <label for="count">题目数量 <span class="optional">至少 8 题</span></label>
+          <input id="count" type="number" min="8" value="8" required>
+          <div class="separator"></div>
+          <div class="form-heading"><h2>模型连接</h2><span>OpenAI 兼容</span></div>
+          <label for="base">API 地址</label>
+          <input id="base" type="url" placeholder="https://api.example.com/v1" required>
+          <label for="model">模型名称</label>
+          <input id="model" placeholder="输入模型名称" required>
+          <label for="key">API Key</label>
+          <input id="key" type="password" autocomplete="off" placeholder="输入你的 API Key" required>
+          <p class="hint">Key 仅保存在当前页面内存中，请求直接发送到你填写的服务地址。</p>
+          <button class="primary" id="generate" type="submit"><span class="btn-label">生成问卷</span><span class="btn-mark" aria-hidden="true">→</span></button>
+        </form>
+      </aside>
+      <section class="content">
+        <div class="content-top">
+          <div><span class="section-index">02</span><h2>问卷预览</h2></div>
+          <span class="status" id="status" role="status">准备开始</span>
+        </div>
+        <div id="error" class="error" role="alert" hidden></div>
+        <div id="workspace">
+          <div class="empty">
+            <div class="mondrian" aria-hidden="true">
+              <span class="tone-red"></span>
+              <span class="tone-yellow"></span>
+              <span class="tone-blue"></span>
+              <span class="tone-paper"></span>
+            </div>
+            <div class="empty-copy">
+              <h3>还没有问卷</h3>
+              <p>从左侧选择题库，或生成一套自定义题目。</p>
+            </div>
+          </div>
+          <div class="dimensions" aria-label="问卷覆盖的四个维度">
+            <div class="dim tone-red"><span>能量来源</span><b>E <small>/</small> I</b></div>
+            <div class="dim tone-yellow"><span>信息获取</span><b>S <small>/</small> N</b></div>
+            <div class="dim tone-blue"><span>决策方式</span><b>T <small>/</small> F</b></div>
+            <div class="dim tone-paper"><span>生活方式</span><b>J <small>/</small> P</b></div>
+          </div>
+        </div>
+        <footer>本问卷用于自我探索，结果不构成心理诊断或能力评价。</footer>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
